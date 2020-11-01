@@ -1,0 +1,284 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/category.js"></script>
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-4"><a href="#" id="testTweeterAPI1" class="btn btn-success" onclick="getTweetsPerSecond()">Tweets/second</a></div>
+        <div class="col-md-4"><a href="#" id="testTweeterAPI2" class="btn btn-danger" onclick="getTweetsPerMinute()">Tweets/minute</a></div>
+        <div class="col-md-4"><a href="#" id="testTweeterAPI3" class="btn btn-primary" onclick="getTweetsPerHour()">Tweets/hour</a></div>
+    </div>
+    <div class="row ">
+        <div class="col-md-12">
+            <hr style="color:black" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div>For tweets created in<input type="text" id="hour" value="0" style="width:50px" onkeyup="checkNum3(this,3);"/>hour(s)<input type="text" id="minute" value="0" style="width:50px" onkeyup="checkNum3(this,59);"/>minute(s)<input type="text" id="second" value="30" style="width:50px" onkeyup="checkNum4(this,59);"/>second(s)</div>
+
+    </div>
+    <div class="row ">
+        <div class="col-md-12">
+            <br /><br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4"><a href="#" id="testTweeterAPI4" class="btn btn-success" onclick="getTweetsTotal()">Get # of Tweets</a> </div>
+        <div class="col-md-4"><a href="#" id="testTweeterAPI5" class="btn btn-danger" onclick="getTopEmojis()">Get Top Emojis in tweets</a></div>
+        <div class="col-md-4"><a href="#" id="testTweeterAPI6" class="btn btn-primary" onclick="getTweetsEmojisPct()">Get Percent of tweets that contains emojis</a></div>
+    </div>
+
+    <div class="row ">
+        <div class="col-md-12">
+            <br /><br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4"><a href="#" id="testTweeterAPI7" class="btn btn-success" onclick="getTopHashtags()">Top hashtags</a> </div>
+        <div class="col-md-4"><a href="#" id="testTweeterAPI8" class="btn btn-danger" onclick="getTweetsUrlPct()">Percent of tweets that contain a url</a></div>
+        <div class="col-md-4"><a href="#" id="testTweeterAPI9" class="btn btn-primary" onclick="getTweetsPhotoUrlPct()">Percent of tweets that contain a photo url</a></div>
+    </div>
+    <div class="row ">
+        <div class="col-md-12">
+            <br /><br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"><a href="#" id="testTweeterAPI10" class="btn btn-danger" onclick="getTweetsTopDomain()">Top domains of urls in tweets </a></div>
+        <div class="col-md-9" id="p">
+            <b>Returned Message From Tweeter Will Be Displayed Here</b>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+
+    var getTweetsPerSecond = function () {
+        $('#p').html('<b>Caculate Tweets Per Second,please wait...</b>');
+        $.ajax({
+            method: "GET",
+            url: "/Tweet/getTweetsPerSecond",
+            success: function (data) {
+
+                $('#p').html(data);
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+
+            },
+            error: function (jqXHR) {
+                $('#p').html('<b>something gets wrong.please check the error log or more detail</b>');
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+            }
+        })
+    }
+
+    var getTweetsPerMinute = function () {
+        $('#p').html('<b>Caculate Tweets Per Minute,please allow around 5 minutes to complete...</b>');
+        $.ajax({
+            method: "GET",
+            url: "/Tweet/getTweetsPerMinute",
+            success: function (data) {
+                $('#p').html(data);
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+
+            },
+            error: function (jqXHR) {
+                $('#p').html('<b>something gets wrong.please check the error log or more detail</b>');
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+            }
+        })
+    }
+
+    var getTweetsPerHour = function () {
+        $('#p').html('<b>Caculate Tweets Per Hour,please allow 1 hour to complete...</b>');
+        $.ajax({
+            method: "GET",
+            url: "/Tweet/getTweetsPerHour",
+            success: function (data) {
+                $('#p').html(data);
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+
+            },
+            error: function (jqXHR) {
+                $('#p').html('<b>something gets wrong.please check the error log or more detail</b>');
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+            }
+        })
+    }
+
+    var getTweetsTotal = function () {
+        $('#p').html('<b>Caculate Number of Total Tweets Returned. Please wait...</b>');
+        let seconds = parseInt($('#hour').val()) * 3600 + parseInt($('#minute').val()) * 60 + parseInt($('#second').val())
+
+        $.ajax({
+            method: "GET",
+            url: "/Tweet/getTweetsTotal?seconds=" + seconds,
+            success: function (data) {
+                $('#p').html(data);
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+
+            },
+            error: function (jqXHR) {
+                $('#p').html('<b>something gets wrong.please check the error log or more detail</b>');
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+            }
+        })
+    }
+
+    var getTopEmojis = function () {
+        $('#p').html('<b>Caculate Top emojis in Tweets,please wait...</b>');
+        let seconds = parseInt($('#hour').val()) * 3600 + parseInt($('#minute').val()) * 60 + parseInt($('#second').val())
+
+        $.ajax({
+            method: "GET",
+            url: "/Tweet/getTopEmojis?seconds=" + seconds,
+            success: function (data) {
+                $('#p').html(data);
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+
+            },
+            error: function (jqXHR) {
+                $('#p').html('<b>something gets wrong.please check the error log or more detail</b>');
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+            }
+        })
+    }
+
+    var getTweetsEmojisPct = function () {
+        $('#p').html('<b>Caculate Percent of Tweets that Contains Emojis,please wait...</b>');
+        let seconds = parseInt($('#hour').val()) * 3600 + parseInt($('#minute').val()) * 60 + parseInt($('#second').val())
+
+        $.ajax({
+            method: "GET",
+            url: "/Tweet/getTweetsEmojisPct?seconds=" + seconds,
+            success: function (data) {
+                $('#p').html(data);
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+
+            },
+            error: function (jqXHR) {
+                $('#p').html('<b>something gets wrong.please check the error log or more detail</b>');
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+            }
+        })
+    }
+
+    var getTopHashtags = function () {
+        $('#p').html('<b>Caculate Top Hashtags in Tweets,please wait...</b>');
+        let seconds = parseInt($('#hour').val()) * 3600 + parseInt($('#minute').val()) * 60 + parseInt($('#second').val())
+
+        $.ajax({
+            method: "GET",
+            url: "/Tweet/getTopHashtags?seconds=" + seconds,
+            success: function (data) {
+                $('#p').html(data);
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+
+            },
+            error: function (jqXHR) {
+                $('#p').html('<b>something gets wrong.please check the error log or more detail</b>');
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+            }
+        })
+    }
+
+    var getTweetsUrlPct = function () {
+        $('#p').html('<b>Caculate Percent of tweets that contain a url ,please wait...</b>');
+        let seconds = parseInt($('#hour').val()) * 3600 + parseInt($('#minute').val()) * 60 + parseInt($('#second').val())
+
+        $.ajax({
+            method: "GET",
+            url: "/Tweet/getTweetsUrlPct?seconds=" + seconds,
+            success: function (data) {
+                $('#p').html(data);
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+
+            },
+            error: function (jqXHR) {
+                $('#p').html('<b>something gets wrong.please check the error log or more detail</b>');
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+            }
+        })
+    }
+    var getTweetsPhotoUrlPct = function () {
+        $('#p').html('<b>Caculate Percent of tweets that contain a photo url ,please wait...</b>');
+        let seconds = parseInt($('#hour').val()) * 3600 + parseInt($('#minute').val()) * 60 + parseInt($('#second').val())
+
+        $.ajax({
+            method: "GET",
+            url: "/Tweet/getTweetsPhotoUrlPct?seconds=" + seconds,
+            success: function (data) {
+                $('#p').html(data);
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+
+            },
+            error: function (jqXHR) {
+                $('#p').html('<b>something gets wrong.please check the error log or more detail</b>');
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+            }
+        })
+    }
+
+    var getTweetsTopDomain = function () {
+        $('#p').html('<b>Caculate Top domains of urls in tweets ,please wait...</b>');
+        let seconds = parseInt($('#hour').val()) * 3600 + parseInt($('#minute').val()) * 60 + parseInt($('#second').val())
+
+        $.ajax({
+            method: "GET",
+            url: "/Tweet/getTweetsTopDomain?seconds=" + seconds,
+            success: function (data) {
+                $('#p').html(data);
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+
+            },
+            error: function (jqXHR) {
+                $('#p').html('<b>something gets wrong.please check the error log or more detail</b>');
+                $('#hour').val("0");
+                $('#minute').val("0");
+                $('#second').val("30");
+            }
+        })
+    }
+</script>
